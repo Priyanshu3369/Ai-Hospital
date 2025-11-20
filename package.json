@@ -1,0 +1,13 @@
+{
+  "name": "ai-hms",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:frontend": "npm --workspace apps/frontend run dev",
+    "dev:backend": "npm --workspace apps/backend run dev",
+    "install:all": "npm install --workspaces"
+  }
+}
