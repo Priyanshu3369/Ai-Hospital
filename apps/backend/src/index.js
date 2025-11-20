@@ -1,20 +1,23 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import testRoute from "./routes/testRoute.js";
+import authRoute from "./routes/authRoute.js";
+import protectedRoute from "./routes/protectedRoute.js";
 
-dotenv.config();               // <--- load env first
+dotenv.config();
 
 import { connectDB } from "./config/db.js";
-connectDB();                   // <--- now MONGO_URI will load correctly
+connectDB();
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-// routes
-import testRoute from "./routes/testRoute.js";
 app.use("/api/test", testRoute);
+app.use("/api/auth", authRoute);
+app.use("/api/protected", protectedRoute);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
