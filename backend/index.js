@@ -1,10 +1,10 @@
-// backend/index.js
 require('dotenv').config();
 const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
 const morgan = require('morgan');
 const routes = require('./routes');
+const { connectToDatabase } = require('./config/db');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -32,6 +32,15 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 HMS backend running on http://localhost:${PORT} (env: ${process.env.NODE_ENV || 'development'})`);
-});
+(async () => {
+  try {
+    await connectToDatabase(process.env.MONGO_URI);
+    console.log('✅ Database connection established (or connecting).');
+  } catch (err) {
+    console.warn('⚠️ Database connection failed on startup. Server will still run, but DB routes will report unavailable.');
+  } finally {
+    app.listen(PORT, () => {
+      console.log(`🚀 HMS backend running on http://localhost:${PORT} (env: ${process.env.NODE_ENV || 'development'})`);
+    });
+  }
+})();
